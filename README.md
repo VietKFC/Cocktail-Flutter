@@ -1,4 +1,4 @@
-# flutter_workout
+# Cocktail-flutter
 
 A new Flutter project.
 
