@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_workout/category/filterCategory.dart';
 import 'package:flutter_workout/detail/cocktaildetail.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,13 +33,28 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         var drinkResponse = json.decode(response.body)[DRINK_RESPONSE] as List;
         drinks.add(Drink(
-            int.parse(drinkResponse.first["idDrink"]),
+            drinkResponse.first["idDrink"],
             drinkResponse.first["strDrink"],
             drinkResponse.first["strCategory"],
             drinkResponse.first["strAlcoholic"],
             drinkResponse.first["strGlass"],
             drinkResponse.first["strInstructions"],
-            drinkResponse.first["strDrinkThumb"]));
+            drinkResponse.first["strDrinkThumb"],
+            drinkResponse.first["strIngredient1"],
+            drinkResponse.first["strIngredient2"],
+            drinkResponse.first["strIngredient3"],
+            drinkResponse.first["strIngredient4"],
+            drinkResponse.first["strIngredient5"],
+            drinkResponse.first["strIngredient6"],
+            drinkResponse.first["strIngredient7"],
+            drinkResponse.first["strIngredient8"],
+            drinkResponse.first["strIngredient9"],
+            drinkResponse.first["strIngredient10"],
+            drinkResponse.first["strIngredient11"],
+            drinkResponse.first["strIngredient12"],
+            drinkResponse.first["strIngredient13"],
+            drinkResponse.first["strIngredient14"],
+            drinkResponse.first["strIngredient15"]));
       } else {
         throw Exception(ERROR_CANNOT_FETCH_DATA);
       }
@@ -148,7 +164,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     .bold),
                                                       ),
                                                       Text(
-                                                        drinks[index].alcoholic,
+                                                        drinks[index]
+                                                                .alcoholic ??
+                                                            "",
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         maxLines: 1,
@@ -167,8 +185,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       CocktailDetailScreen(
-                                                          drink:
-                                                              drinks[index])));
+                                                          drinkId: drinks[index]
+                                                              .id)));
                                         },
                                       );
                                     }),
@@ -206,123 +224,151 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               children: [
                 Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Stack(
-                          children: [
-                            const ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              child: Image(
-                                image: AssetImage(
-                                    "assets/images/img_original_drink.jpg"),
-                                width: 160,
-                                height: 110,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 160,
-                              height: 110,
-                              child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
-                                color: Colors.black.withOpacity(0.5),
-                              )),
-                            ),
-                            const Positioned.fill(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  ORDINARY_CATEGORY,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                      color: Colors.white),
+                    child: GestureDetector(
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Stack(
+                              children: [
+                                const ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                  child: Image(
+                                    image: AssetImage(
+                                        "assets/images/img_original_drink.jpg"),
+                                    width: 160,
+                                    height: 110,
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
-                        ))),
+                                SizedBox(
+                                  width: 160,
+                                  height: 110,
+                                  child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(15)),
+                                    color: Colors.black.withOpacity(0.5),
+                                  )),
+                                ),
+                                const Positioned.fill(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      ORDINARY_CATEGORY,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const FilterCategoryScreen(
+                                        categoryPath: ORDINARY_PATH,
+                                      )));
+                        })),
                 Expanded(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Stack(
-                    children: [
-                      const ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        child: Image(
-                          image: AssetImage("assets/images/img_cocktail.jpg"),
-                          height: 110,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 160,
-                        height: 110,
-                        child: DecoratedBox(
-                            decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(15)),
-                          color: Colors.black.withOpacity(0.5),
-                        )),
-                      ),
-                      const Positioned.fill(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            COCKTAIL_CATEGORY,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                                color: Colors.white),
+                    child: GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      children: [
+                        const ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          child: Image(
+                            image: AssetImage("assets/images/img_cocktail.jpg"),
+                            height: 110,
+                            fit: BoxFit.fill,
                           ),
                         ),
-                      )
-                    ],
+                        SizedBox(
+                          width: 160,
+                          height: 110,
+                          child: DecoratedBox(
+                              decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(15)),
+                            color: Colors.black.withOpacity(0.5),
+                          )),
+                        ),
+                        const Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              COCKTAIL_CATEGORY,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FilterCategoryScreen(
+                                  categoryPath: COCKTAIL_PATH,
+                                )));
+                  },
                 )),
                 Expanded(
-                    child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Stack(
-                          children: [
-                            const ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              child: Image(
-                                image:
-                                    AssetImage("assets/images/img_cocoa.jpg"),
-                                height: 110,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 160,
+                    child: GestureDetector(
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Stack(
+                        children: [
+                          const ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            child: Image(
+                              image: AssetImage("assets/images/img_cocoa.jpg"),
                               height: 110,
-                              child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
-                                color: Colors.black.withOpacity(0.5),
-                              )),
+                              fit: BoxFit.fill,
                             ),
-                            const Positioned.fill(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  COCOA_CATEGORY,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 17,
-                                      color: Colors.white),
-                                ),
+                          ),
+                          SizedBox(
+                            width: 160,
+                            height: 110,
+                            child: DecoratedBox(
+                                decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(15)),
+                              color: Colors.black.withOpacity(0.5),
+                            )),
+                          ),
+                          const Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                COCOA_CATEGORY,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                    color: Colors.white),
                               ),
-                            )
-                          ],
-                        )))
+                            ),
+                          )
+                        ],
+                      )),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FilterCategoryScreen(
+                                  categoryPath: COCOA_PATH,
+                                )));
+                  },
+                ))
               ],
             ),
           ),
